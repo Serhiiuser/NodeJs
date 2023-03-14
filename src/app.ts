@@ -1,73 +1,43 @@
-import { Request, Response } from "express";
+import  {NextFunction, Request, Response} from "express";
 import mongoose from "mongoose";
 const express = require("express");
 
-import {User} from "./models/User.model";
-import {IUser} from "./types/user.types";
+
+
+import {configs} from "./configs/config";
+import {userRouter} from "./routers/userRouters";
+import {IError} from "./types/common.types";
+
+
 
 const app = express();
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+app.use('/users', userRouter)
 
-app.get("/users", async (req: Request, res: Response):Promise <Response<IUser[]>> => {
-  const users = await User.find();
+app.use((err:IError, req:Request, res:Response, next:NextFunction) =>{
 
-  return res.json(users);
+  const status = err.status;
 
-});
-
-app.get("/users/:userId", async (req: Request, res: Response):Promise <Response<IUser>> => {
-    const {userId} = req.params
-  const users = await User.findById(userId);
-
- return  res.json(users);
-});
-
- app.post("/users", async (req: Request, res: Response) => {
-
-     const body = req.body;
-         const user = await User.create({...body});
-
-         res.status(201).json({
-             message: "User created!",
-             data: user
-         });
-});
-//
-app.put("/users/:userId", async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  const user = req.body;
-
-  const updatedUser = await User.updateOne({_id:userId}, {...user});
-
-
-  res.status(200).json({
-    message: "User updated",
-    data: updatedUser,
+ return  res.status(status).json({
+    message:err.message,
+    status
   });
-});
-
-app.delete("/users/:userId", async (req: Request, res: Response) => {
-  const { userId } = req.params;
-
-await User.deleteOne({_id:userId});
-  res.status(200).json({
-    message: "User deleted",
-  });
-});
-
+})
 
 
 app.get("/welcome", (req: Request, res: Response) => {
   res.send("WELCOME");
 });
 
-const PORT = 5100;
 
-app.listen(PORT, () => {
-  mongoose.connect('mongodb://127.0.0.1:27017/sep-2022')
-  console.log(`Server has started on PORT ${PORT} 🚀🚀🚀`);
+
+app.listen(configs.PORT, () => {
+    // @ts-ignore
+    mongoose.connect(configs.DB_URL)
+  console.log(`Server has started on PORT ${configs.PORT} 🚀🚀🚀`);
 });
