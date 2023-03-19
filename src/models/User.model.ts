@@ -1,31 +1,32 @@
-import {model, Schema} from "mongoose";
-import {EGenders} from "../types/user.types";
+import { model, Schema } from "mongoose";
 
-const userSchema = new Schema({
-    name:{
-        type: String,
-    },
-    email: {
-        type: String,
-        unique: true,
-        required:[true, "Email is required"],
-        trim: true,
-        lowerCase: true
-    },
-    password: {
-        type: String,
-        required:[true, "Password is required"],
-    },
-    gender: {
-        type: String,
-        enum: EGenders
-    }
-},
+import { EGenders } from "../enums";
+
+const userSchema = new Schema(
     {
-        versionKey: false
+        name: {
+            type: String,
+        },
+        email: {
+            type: String,
+            unique: true,
+            required: [true, "Email is required"],
+            trim: true,
+            lowercase: true,
+        },
+        password: {
+            type: String,
+            required: [true, "Password is required"],
+        },
+        gender: {
+            type: String,
+            enum: EGenders,
+        },
+    },
+    {
+        versionKey: false,
+        timestamps: true,
     }
-
 );
 
-export const User = model ("user", userSchema)
-
+export const User = model("user", userSchema);

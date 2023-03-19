@@ -4,9 +4,9 @@ const express = require("express");
 
 
 
-import {configs} from "./configs/config";
-import {userRouter} from "./routers/userRouters";
-import {IError} from "./types/common.types";
+import {configs} from "./configs/";
+import {authRouter, userRouter} from "./routers/";
+import {IError} from "./types/";
 
 
 
@@ -17,7 +17,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-app.use('/users', userRouter)
+app.use('/users', userRouter);
+app.use('/auth', authRouter);
+
 
 app.use((err:IError, req:Request, res:Response, next:NextFunction) =>{
 
@@ -29,11 +31,9 @@ app.use((err:IError, req:Request, res:Response, next:NextFunction) =>{
   });
 })
 
-
 app.get("/welcome", (req: Request, res: Response) => {
   res.send("WELCOME");
 });
-
 
 
 app.listen(configs.PORT, () => {
