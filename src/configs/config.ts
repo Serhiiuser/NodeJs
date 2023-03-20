@@ -9,4 +9,8 @@ export const configs ={
 
     ACCESS_SECRET: process.env.JWT_ACCESS_SECRET || '111',
     REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || '222',
+
+    TWILIO_AUTH_TOKEN:process.env.TWILIO_AUTH_TOKEN,
+    TWILIO_ACCOUNT_SID:process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_SERVICE_SID: process.env.TWILIO_SERVICE_SID
 }

@@ -2,7 +2,7 @@ import * as jwt from "jsonwebtoken";
 
 import {configs} from "../configs"
 import { ITokenPair, ITokenPayload } from "../types";
-import {ApiError} from "../errors/api.error";
+import {ApiError} from "../errors/";
 import {ETokenType} from "../enums";
 
 class TokenService {

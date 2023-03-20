@@ -1,10 +1,11 @@
 import {ApiError} from "../errors/";
-import {Token} from "../models/";
-import {User} from "../models/";
+import {Token, User} from "../models/";
 import {ITokenPair, ITokenPayload, IUser} from "../types";
 import {ICredentials} from "../types/auth.types";
 import {passwordService} from "./password.service";
 import {tokenService} from "./token.service";
+import {smsService} from "./sms.service";
+import {ESmsActionEnum} from "../enums";
 
 class AuthService {
     public async register(body: IUser): Promise<void> {
@@ -15,10 +16,15 @@ class AuthService {
                 ...body,
                 password: hashedPassword,
             });
+
+            await smsService.sendSms('+380630153916', ESmsActionEnum.WELCOME)
+
         } catch (e) {
             throw new ApiError(e.message, e.status);
         }
     }
+
+
 
     public async login(
         credentials: ICredentials,
